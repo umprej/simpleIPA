@@ -25,29 +25,27 @@ async function main() {
 
     resultDiv.textContent = "";
     let currLang = "UK";
+    let currWord = "";
 
     searchBtn.addEventListener('click', (event) => {
-        resultDiv.innerHTML += "<br>" + wordInput.value.toLowerCase();
+        resultDiv.innerHTML += wordInput.value.toLowerCase();
         wordInput.value = "";
     });
 
     wordInput.addEventListener("keyup", (event) => {
         let currDict = (currLang == "UK") ? dictUK : dictUS;
-        let resultIPA = transcribe(wordInput.value, currDict);
-        resultDiv.innerHTML = "<strong>" + resultIPA + "</strong>";
+        currWord = wordInput.value;
+        let resultIPA = transcribe(currWord, currDict);
+        resultDiv.innerHTML = "<strong>" + resultIPA + "</strong><br>";
 
         //if ENTER key is pressed
         if (event.keyCode === 13) {
             searchBtn.click();
         }
-      });
-
-    searchBtn.addEventListener('click', (event) => {
-        resultDiv.innerHTML += "<br>" + wordInput.value.toLowerCase();
     });
 
     speakBtn.addEventListener('click', (event) => {
-        let utterance = new SpeechSynthesisUtterance(wordInput.value.toLowerCase());
+        let utterance = new SpeechSynthesisUtterance(currWord.toLowerCase());
         utterance.lang = (currLang == "UK") ? "en-GB" : "en-US";
         speechSynthesis.speak(utterance);
     })
