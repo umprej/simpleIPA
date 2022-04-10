@@ -12,7 +12,19 @@
 <body>
     <div class="info">
         <h1>simple transcription</h1>
+        <h2>phonemic transcription of English to IPA</h2>
     </div>
+    <form id="lang-selection">
+        <div>
+            <input type="radio" id="UK" name="dict-lang" value="UK" checked>
+            <label for="child">UK</label>
+        </div>
+        
+        <div>
+            <input type="radio" id="US" name="dict-lang" value="US">
+            <label for="adult">US</label>
+        </div>
+    </form>
     <div class="search">
         <input type="text" id="word-input" autofocus>
         <button type="submit" id="search">search</button>

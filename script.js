@@ -25,12 +25,14 @@ async function main() {
 
     searchBtn.addEventListener('click', (event) => {
         resultDiv.innerHTML += "<br>" + wordInput.value.toLowerCase();
-
+        wordInput.value = "";
     });
 
     wordInput.addEventListener("keyup", (event) => {
         console.log(event.keyCode);
-        let resultIPA = transcribe(wordInput.value, dictUK);
+        let currLang = document.querySelector('input[name="dict-lang"]:checked').value;
+        let currDict = (currLang == "UK") ? dictUK : dictUS;
+        let resultIPA = transcribe(wordInput.value, currDict);
         resultDiv.innerHTML = "<strong>" + resultIPA + "</strong>";
 
         //if ENTER key is pressed
@@ -39,6 +41,9 @@ async function main() {
         }
       });
 
+    searchBtn.addEventListener('click', (event) => {
+        resultDiv.innerHTML += "<br>" + wordInput.value.toLowerCase();
+    });
 }
 
 main();
