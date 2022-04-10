@@ -20,8 +20,11 @@ async function main() {
     const wordInput = document.querySelector("#word-input");
     const searchBtn = document.querySelector("#search");
     const resultDiv = document.querySelector(".results");
-    
+    const speakBtn = document.querySelector("#speak");
+    const radioBtns = document.querySelectorAll("input[name='dict-lang']");
+
     resultDiv.textContent = "";
+    let currLang = "UK";
 
     searchBtn.addEventListener('click', (event) => {
         resultDiv.innerHTML += "<br>" + wordInput.value.toLowerCase();
@@ -29,8 +32,6 @@ async function main() {
     });
 
     wordInput.addEventListener("keyup", (event) => {
-        console.log(event.keyCode);
-        let currLang = document.querySelector('input[name="dict-lang"]:checked').value;
         let currDict = (currLang == "UK") ? dictUK : dictUS;
         let resultIPA = transcribe(wordInput.value, currDict);
         resultDiv.innerHTML = "<strong>" + resultIPA + "</strong>";
@@ -44,6 +45,20 @@ async function main() {
     searchBtn.addEventListener('click', (event) => {
         resultDiv.innerHTML += "<br>" + wordInput.value.toLowerCase();
     });
+
+    speakBtn.addEventListener('click', (event) => {
+        let utterance = new SpeechSynthesisUtterance(wordInput.value.toLowerCase());
+        utterance.lang = (currLang == "UK") ? "en-GB" : "en-US";
+        speechSynthesis.speak(utterance);
+    })
+
+    radioBtns.forEach((button) => {
+        button.addEventListener('change', (event) => {
+            currLang = button.value;
+        });
+    });
+
+
 }
 
 main();
