@@ -1,9 +1,19 @@
 function transcribe(input, dict) {
-    let word = input.toLowerCase();
     let result = "";
-    if (word in dict) {
-        result = dict[word]
+    console.log(input);
+    for (let i in input) {
+        let word = input[i].toLowerCase();
+        console.log(word);
+        if (word in dict) {
+            result += dict[word];
+        }
+        else {
+            result += "/___/";
+        }
     }
+
+    console.log(result);
+    result = result.replace(/\/\//g, " ")   //replace double slash with space, used when multi-word input
     return result;
 }
 
@@ -25,7 +35,7 @@ async function main() {
 
     resultDiv.textContent = "";
     let currLang = "UK";
-    let currWord = "";
+    let currStr = "";
 
     searchBtn.addEventListener('click', (event) => {
         resultDiv.innerHTML += wordInput.value.toLowerCase();
@@ -34,8 +44,8 @@ async function main() {
 
     wordInput.addEventListener("keyup", (event) => {
         let currDict = (currLang == "UK") ? dictUK : dictUS;
-        currWord = wordInput.value;
-        let resultIPA = transcribe(currWord, currDict);
+        currStr = wordInput.value.match(/\b(\w+)\b/g); //split string into words, remove ws
+        let resultIPA = transcribe(currStr, currDict);
         resultDiv.innerHTML = "<strong>" + resultIPA + "</strong><br>";
 
         //if ENTER key is pressed
@@ -45,7 +55,7 @@ async function main() {
     });
 
     speakBtn.addEventListener('click', (event) => {
-        let utterance = new SpeechSynthesisUtterance(currWord.toLowerCase());
+        let utterance = new SpeechSynthesisUtterance(currStr);
         utterance.lang = (currLang == "UK") ? "en-GB" : "en-US";
         speechSynthesis.speak(utterance);
     })
@@ -55,8 +65,6 @@ async function main() {
             currLang = button.value;
         });
     });
-
-
 }
 
 main();
